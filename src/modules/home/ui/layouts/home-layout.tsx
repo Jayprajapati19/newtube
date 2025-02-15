@@ -1,15 +1,21 @@
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { HomeNavbar } from "../components/home-navbar";
+
+
 interface HomeLayoutProps {
     children: React.ReactNode;
 }
 
 export const HomeLayout = ({ children }: HomeLayoutProps) => {
     return (
-        <div>
-            <div>
-                <p>Home Navbar</p>
+        <SidebarProvider >
+            <div className="w-full  ">
+                <HomeNavbar />
+                <div>
+                    {children}
+                </div>
             </div>
-            {children}
-        </div>
+        </SidebarProvider>
 
     )
 }
