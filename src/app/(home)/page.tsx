@@ -7,7 +7,6 @@ export default function Home() {
 
       <p className="text-xl font-semibold tracking-tight"> MyTube </p>
 
-
     </div>
   );
 }
