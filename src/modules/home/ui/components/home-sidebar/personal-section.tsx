@@ -1,31 +1,34 @@
 "use client"
 
 import Link from "next/link"
-import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
-import { FlameIcon, HomeIcon, PlaySquareIcon } from "lucide-react"
+import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { HistoryIcon, ListVideoIcon, ThumbsUpIcon } from "lucide-react"
 
 const items = [
     {
-        title: "Home",
-        url: "/",
-        icon: HomeIcon
-    },
-    {
-        title: "Subscriptions",
-        url: "/feed/subscriptions",
-        icon: PlaySquareIcon,
+        title: "History",
+        url: "/playlist/history",
+        icon: HistoryIcon,
         auth: true,
     },
     {
-        title: "Trending",
-        url: "/feed/trending",
-        icon: FlameIcon,
+        title: "Liked Videos",
+        url: "/playlist/liked",
+        icon: ThumbsUpIcon,
+        auth: true,
+    },
+    {
+        title: "All Playlists",
+        url: "/playlists",
+        icon: ListVideoIcon,
+        auth: true,
     }
 ]
 
-export const MainSection = () => {
+export const PersonalSection = () => {
     return (
         <SidebarGroup>
+            <SidebarGroupLabel>You</SidebarGroupLabel>
             <SidebarGroupContent>
 
                 <SidebarMenu>
@@ -48,6 +51,6 @@ export const MainSection = () => {
                 </SidebarMenu>
 
             </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup >
     )
 }
