@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { FlameIcon, HomeIcon, PlaySquareIcon } from "lucide-react"
 
@@ -32,10 +33,14 @@ export const MainSection = () => {
                             <SidebarMenuButton
                                 tooltip={item.title}
                                 asChild
-                                isActive={false}
-
+                                isActive={false} //TODO: change to look at currerent pathname 
+                                onClick={() => { }} //TODO: do something on click
                             >
-
+                                <Link href={item.url} className="flex items-center gap-4" >
+                                    <item.icon />
+                                    <span className="text-sm ">{item.title}
+                                    </span>
+                                </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}

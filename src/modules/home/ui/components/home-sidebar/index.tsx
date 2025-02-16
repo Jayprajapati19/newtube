@@ -7,6 +7,7 @@ export const HomeSidebar = () => {
             <SidebarContent className="bg-backgrounds">
                 <MainSection />
 
+
             </SidebarContent>
         </Sidebar>
     )
