@@ -1,7 +1,13 @@
-const Layout = () => {
+interface LayoutProps {
+    children: React.ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
     return (
-//    1:39 
-)
+        <div className="min-h-screen flex items-center justify-center ">
+            {children}
+        </div>
+    )
 }
 
 export default Layout;
