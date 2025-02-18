@@ -23,8 +23,8 @@ const items = [
         url: "/playlists",
         icon: ListVideoIcon,
         auth: true,
-    }
-]
+    },
+];
 
 export const PersonalSection = () => {
 
@@ -32,6 +32,7 @@ export const PersonalSection = () => {
     const { isSignedIn } = useAuth();
 
     return (
+
         <SidebarGroup>
             <SidebarGroupLabel>You</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -41,7 +42,8 @@ export const PersonalSection = () => {
                             <SidebarMenuButton
                                 tooltip={item.title}
                                 asChild
-                                isActive={false} //TODO: change to look at currerent pathname 
+                                isActive={false}
+                                //TODO: change to look at currerent pathname 
                                 onClick={(e) => {
                                     if (!isSignedIn && item.auth) {
                                         e.preventDefault();
@@ -59,6 +61,7 @@ export const PersonalSection = () => {
                     ))};
                 </SidebarMenu>
             </SidebarGroupContent>
-        </SidebarGroup >
+        </SidebarGroup>
+
     )
-}
+};
