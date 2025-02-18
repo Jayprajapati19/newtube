@@ -46,8 +46,9 @@ export const PersonalSection = () => {
                                 //TODO: change to look at currerent pathname 
                                 onClick={(e) => {
                                     if (!isSignedIn && item.auth) {
-                                        e.preventDefault();
-                                        return clerk.openSignIn();
+                                        e.preventDefault()
+
+                                        return clerk.openSignIn()
                                     }
                                 }}
                             >
@@ -58,7 +59,7 @@ export const PersonalSection = () => {
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
-                    ))};
+                    ))}
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>
