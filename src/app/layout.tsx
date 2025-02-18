@@ -20,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider afterSignOutUrl="/" >
-      <html lang="en" >
+    <ClerkProvider afterSignOutUrl="/"  >
+      <html lang="en" suppressHydrationWarning >
         <body
           className={inter.className}
         >
