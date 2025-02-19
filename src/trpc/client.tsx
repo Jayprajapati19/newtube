@@ -22,7 +22,10 @@ function getQueryClient() {
 function getUrl() {
     const base = (() => {
         if (typeof window !== 'undefined') return '';
+        // TODO: modify for outside vercel deployment
+
         if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+
         return 'http://localhost:3000';
     })();
     return `${base}/api/trpc`;
