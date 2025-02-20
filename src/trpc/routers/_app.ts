@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { baseProcedure, createTRPCRouter } from '../init';
+// import { auth } from '@clerk/nextjs/server';
+// import { TRPCError } from '@trpc/server';
 export const appRouter = createTRPCRouter({
     hello: baseProcedure
         .input(
@@ -8,6 +10,7 @@ export const appRouter = createTRPCRouter({
             }),
         )
         .query((opts) => {
+
             return {
                 greeting: `hello ${opts.input.text}`,
             };
