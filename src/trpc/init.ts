@@ -48,6 +48,7 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
     return opts.next({
         ctx: {
             ...ctx,
+            user,
         }
     })
 })
