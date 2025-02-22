@@ -5,7 +5,7 @@
   "scripts": {
     "dev:all": "concurrently \"bun run dev:webhook\" \"bun run dev\"",
     "dev": "next dev",
-    "dev:webhook": "ngrok http 3000 --subdomain=obliging-condor-nice 3000",
+    "dev:webhook": "https://1c7e-2409-4080-9289-35c-e94d-c9d2-f3b2-71ba.ngrok-free.app 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
