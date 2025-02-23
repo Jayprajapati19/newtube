@@ -9,9 +9,10 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <Suspense fallback={<p>Error....</p>}>
+      <Suspense fallback={<p>Loading......</p>}>
         <PageClient />
       </Suspense>
     </HydrateClient>
+
   );
 }
