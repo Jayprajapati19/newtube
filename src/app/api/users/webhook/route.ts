@@ -66,17 +66,14 @@ export async function POST(req: Request) {
 
     if (eventType === "user.deleted") {
         const { data } = evt;
-
         if (!data.id) {
             return new Response("Missing user id", { status: 400 })
         }
-
         await db.delete(users).where(eq(users.clerkId, data.id))
     }
 
     if (eventType === "user.updated") {
         const { data } = evt;
-
         await db
             .update(users)
             .set({
