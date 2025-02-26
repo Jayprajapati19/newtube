@@ -11,6 +11,10 @@ export const VideosSection = () => {
     return (
         <div>
             Videos sections
+
+
+
+
         </div>
     )
 }
