@@ -14,11 +14,7 @@ export const VideosSection = () => {
 
     return (
         <div>
-            Videos sections
-
-
-
-
+            {JSON.stringify(data)}
         </div>
     )
 }

@@ -38,10 +38,25 @@ export const studioRouter = createTRPCRouter({
                             )
                             : undefined,
                     )).orderBy(desc(videos.updatedAt), desc(videos.id))
-                .limit(limit + 1);
+                // add 1 to the limit to check if there is more data
+                .limit(limit + 1)
 
+            const hasMore = data.length > limit;
+            // Remove the last item if there is more data   
+            const items = hasMore ? data.slice(0, -1) : data;
+            // set rhe next cursor to the last item if there is more data
+            const lastItem = items[items.length - 1];
 
+            const nextCursor = hasMore
+                ? {
+                    id: lastItem.id,
+                    updatedAt: lastItem.updatedAt,
+                }
+                : null;
 
-            return data;
+            return {
+                items,
+                nextCursor,
+            };
         }),
 });
