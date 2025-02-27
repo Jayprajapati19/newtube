@@ -7,6 +7,7 @@ const Page = async () => {
         limit: DEFAULT_LIMIT,
     });
 
+
     return (
         <HydrateClient>
             <StudioView />
