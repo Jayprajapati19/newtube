@@ -8,10 +8,19 @@ export const studioRouter = createTRPCRouter({
     getMany: protectedProcedure
         .input(
             z.object({
-                cursor: z.object({})
-            })
+                cursor: z.object({
+                    id: z.string().uuid(),
+                    updatedAt: z.date(),
+                })
+                    .nullish(),
+                limit: z.number().min(1).max(100),
+
+            }),
         )
-        .query(async () => {
+        .query(async ({ ctx, input }) => {
+            const { } = input;
+
+
             const data = await db
                 .select()
                 .from(videos);
