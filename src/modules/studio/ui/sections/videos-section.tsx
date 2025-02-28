@@ -10,6 +10,7 @@ import { InfiniteScroll } from "@/components/infinite-scroll";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link";
+import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 
 
 export const VideosSection = () => {
@@ -50,7 +51,11 @@ const VideosSectionSuspense = () => {
                             <Link href={`/studio/videos/${video.id}`} key={video.id} legacyBehavior>
                                 <TableRow className="cursor-pointer ">
                                     <TableCell>
-                                        {video.title}
+                                        <div className="flex items-center gap-4 ">
+                                            <div className="relative aspect-video w-36 shrink-0  ">
+                                                <VideoThumbnail />
+                                            </div>
+                                        </div>
                                     </TableCell>
                                     <TableCell>
                                         visibility
