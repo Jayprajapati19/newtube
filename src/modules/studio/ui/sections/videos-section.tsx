@@ -48,6 +48,7 @@ const VideosSectionSuspense = () => {
                             <TableHead className="text-right pr-6 " >Likes</TableHead>
                         </TableRow>
                     </TableHeader>
+
                     <TableBody>
                         {videos.pages.flatMap((page) => page.items).map((video) => (
                             <Link href={`/studio/videos/${video.id}`} key={video.id} legacyBehavior>
