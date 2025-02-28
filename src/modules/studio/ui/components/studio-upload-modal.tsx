@@ -1,10 +1,11 @@
 "use client"
 
 import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
 import { trpc } from "@/trpc/client"
-import { Loader2Icon, PlusIcon } from "lucide-react"
+import { StudioUploader } from "./studio-uploader"
+import { Button } from "@/components/ui/button"
 import { ResponsiveModal } from "@/components/responsive-modal"
+import { Loader2Icon, PlusIcon } from "lucide-react"
 
 export const StudioUploadModal = () => {
 
@@ -28,11 +29,13 @@ export const StudioUploadModal = () => {
         <>
             <ResponsiveModal
                 title="Upload video"
-                open={!!create.data}
+                open={!!create.data?.url}
                 onOpenChange={() => create.reset()}
-            // 6:33
             >
-                <p>This will be an uploder</p>
+                {create.data?.url
+                    ? < StudioUploader endpoint={create.data.url} onSuccess={() => { }} />
+                    : <Loader2Icon />
+                }
             </ResponsiveModal>
 
             <Button variant="secondary" onClick={() => create.mutate()} disabled={create.isPending}>
