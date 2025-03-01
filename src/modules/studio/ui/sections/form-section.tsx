@@ -58,30 +58,108 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
 
     return (
-        <div className="flex items-center justify-between mb-6">
-            <div>
-                <h1 className="text-2xl font-bold">Video Details</h1>
-                <p className="text-xs text-muted-foreground ">Manage Your video details</p>
-            </div>
-            <div className="flex items-center gap-x-2 ">
-                <Button type="submit" disabled={false}>
-                    Save
-                </Button>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreVerticalIcon />
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 className="text-2xl font-bold">Video Details</h1>
+                        <p className="text-xs text-muted-foreground ">Manage Your video details</p>
+                    </div>
+                    <div className="flex items-center gap-x-2 ">
+                        <Button type="submit" disabled={false}>
+                            Save
                         </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" >
-                        <DropdownMenuItem>
-                            <TrashIcon className="size-4 mr-2" />
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-        </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <MoreVerticalIcon />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" >
+                                <DropdownMenuItem>
+                                    <TrashIcon className="size-4 mr-2" />
+                                    Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <div className="space-y-8 lg:col-span-3">
+                        <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Title
+                                        {/* TODO: add ai generate button */}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder="Add a title to your video"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Description
+                                        {/* TODO: add ai generate button */}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            {...field}
+                                            value={field.value ?? ""}
+                                            rows={10}
+                                            className="resize-none pr-10"
+                                            placeholder="Add a description to your video"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        {/* TODO: add thumbnail feild here */}
+                        <FormField
+                            control={form.control}
+                            name="categoryId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Category
+                                    </FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value ?? undefined}
+
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a Category" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                    </div>
+
+                </div>
+            </form>
+        </Form>
+
+
     )
 
 
