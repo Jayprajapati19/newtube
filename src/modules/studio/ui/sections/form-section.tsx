@@ -43,7 +43,8 @@ const FormSectionSkeleton = () => {
 };
 
 const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
-    const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId })
+    const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId });
+    const [categories] = trpc.categories.getMany.useSuspenseQuery();
 
     const form = useForm<z.infer<typeof videoUpdateSchema>>({
         resolver: zodResolver(videoUpdateSchema),
@@ -140,13 +141,20 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     <Select
                                         onValueChange={field.onChange}
                                         defaultValue={field.value ?? undefined}
-
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select a Category" />
+                                                <SelectValue placeholder="Select a category" />
                                             </SelectTrigger>
                                         </FormControl>
+                                        <SelectContent>
+                                            {categories.map((category) => (
+                                                <SelectItem key={category.id} value={category.id}>
+                                                    {category.name}
+                                                    {/* 8:48 */}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
                                     <FormMessage />
                                 </FormItem>
