@@ -151,7 +151,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                             {categories.map((category) => (
                                                 <SelectItem key={category.id} value={category.id}>
                                                     {category.name}
-                                                    {/* 8:48 */}
+
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
