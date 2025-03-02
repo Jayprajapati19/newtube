@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "inferred.litix.io",
       },
+      {
+        protocol: "https",
+        hostname: "bei6v3jjnw.ufs.sh",
+      },
     ],
   },
 };
