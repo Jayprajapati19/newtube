@@ -91,7 +91,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
         onSuccess: () => {
             utils.studio.getMany.invalidate();
             utils.studio.getOne.invalidate({ id: videoId });
-            toast.success("Thumbnail Rstored ✅");
+            toast.success("Thumbnail Restored ✅");
 
         },
         onError: () => {
