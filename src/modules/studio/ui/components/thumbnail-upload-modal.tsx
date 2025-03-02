@@ -1,7 +1,6 @@
 import { UploadDropzone } from "@/lib/uploadthing";
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
 
 interface ThumbnailUploadModalProps {
     videoId: string;
@@ -17,7 +16,6 @@ export const ThumbnailUploadModal = ({
     const onUploadComplete = () => {
         utils.studio.getMany.invalidate();
         utils.studio.getOne.invalidate({ id: videoId });
-        toast.success("Thumbnail uploaded successfully ✅");
         onOpenChange(false);
     };
 

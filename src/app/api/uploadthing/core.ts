@@ -60,23 +60,23 @@ export const ourFileRouter = {
             return { user, ...input };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-            try {
-                await db
-                    .update(videos)
-                    .set({
-                        thumbnailUrl: file.url,
-                        thumbnailKey: file.key,
-                    })
-                    .where(and(
-                        eq(videos.id, metadata.videoId),
-                        eq(videos.userId, metadata.user.id),
-                    ));
+            // try {
+            await db
+                .update(videos)
+                .set({
+                    thumbnailUrl: file.url,
+                    thumbnailKey: file.key,
+                })
+                .where(and(
+                    eq(videos.id, metadata.videoId),
+                    eq(videos.userId, metadata.user.id),
+                ));
 
-                return { uploadedBy: metadata.user.id };
-            } catch (error) {
-                console.error("Error updating video thumbnail:", error);
-                throw new UploadThingError("Failed to update video thumbnail");
-            }
+            return { uploadedBy: metadata.user.id };
+            // } catch (error) {
+            //     console.error("Error updating video thumbnail:", error);
+            //     throw new UploadThingError("Failed to update video thumbnail");
+            // }
         }),
 } satisfies FileRouter;
 
