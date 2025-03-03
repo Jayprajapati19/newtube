@@ -11,17 +11,17 @@ import { workflow } from "@/lib/workflow";
 export const videosRouter = createTRPCRouter({
 
     generateThumbnail: protectedProcedure
-        .mutation(async ({ ctx }) => {
-
+        .input(z.object({ id: z.string().uuid() }))
+        .mutation(async ({ ctx, input }) => {
             const { id: userId } = ctx.user;
 
             const { workflowRunId } = await workflow.trigger({
                 url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
-                body: { userId },
+                body: { userId, videoId: input.id },
             });
+
             return workflowRunId;
         }),
-
 
     restoreThumbnail: protectedProcedure
         .input(z.object({ id: z.string().uuid() }))
@@ -134,7 +134,6 @@ export const videosRouter = createTRPCRouter({
 
     create: protectedProcedure.mutation(async ({ ctx }) => {
         const { id: userId } = ctx.user;
-
         const upload = await mux.video.uploads.create({
             new_asset_settings: {
                 passthrough: userId,

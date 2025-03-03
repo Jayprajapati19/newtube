@@ -24,7 +24,6 @@ type WebhookEvent =
     | VideoAssetDeletedWebhookEvent;
 
 
-
 export const POST = async (request: Request) => {
     if (!SIGNING_SECRET) {
         throw new Error("MUX_WEBHOOK_SECRET is not set");
@@ -179,7 +178,6 @@ export const POST = async (request: Request) => {
             break;
         }
     }
-
 
     return new Response("Webhook received", { status: 200 });
 };

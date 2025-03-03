@@ -15,7 +15,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { CopyCheckIcon, CopyIcon, Globe2Icon, ImagePlusIcon, LockIcon, MoreVerticalIcon, RotateCcwIcon, SparkleIcon, TrashIcon } from "lucide-react";
+import { CopyCheckIcon, CopyIcon, Globe2Icon, ImagePlayIcon, LockIcon, MoreVerticalIcon, RotateCcwIcon, SparkleIcon, TrashIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormLabel, FormMessage, FormItem } from "@/components/ui/form";
@@ -54,7 +54,10 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     const router = useRouter();
     const utils = trpc.useUtils();
 
+
     const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+
+
 
     const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId });
     const [categories] = trpc.categories.getMany.useSuspenseQuery();
@@ -85,12 +88,10 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     });
 
 
-
-    const generateThumbnail = trpc.videos.restoreThumbnail.useMutation({
+    const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
         onSuccess: () => {
-            utils.studio.getMany.invalidate();
-            utils.studio.getOne.invalidate({ id: videoId });
-            toast.success("Thumbnail Restored ✅");
+
+            toast.success("Background job started", { description: "this may take some time" });
 
         },
         onError: () => {
@@ -119,6 +120,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     const onSubmit = (data: z.infer<typeof videoUpdateSchema>) => {
         update.mutate(data);
     };
+
 
 
     const fullUrl = `${process.env.VERCEL_URL || "http://localhost:3000"}/videos/${videoId}`
@@ -234,22 +236,23 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                             size="icon"
                                                             className="bg-black/50 hover:bg-black/50  absolute top-1 right-1 rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 duration-300 size-7 "
                                                         >
-                                                            <MoreVerticalIcon className="text-white" />
+                                                            <MoreVerticalIcon className=" text-white " />
                                                         </Button>
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="start" side="right">
                                                         <DropdownMenuItem
                                                             onClick={() => setThumbnailModalOpen(true)}
                                                         >
-                                                            <ImagePlusIcon className="size-4 mr-1 " />
+                                                            <ImagePlayIcon className="size-4 mr-1 " />
                                                             Change
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={() => generateThumbnail.mutate({ id: videoId })}
+                                                        >
                                                             <SparkleIcon className="size-4 mr-1 " />
                                                             AI-Generated
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => restoreThumbnail.mutate({ id: videoId })}>
+                                                        <DropdownMenuItem onClick={() => restoreThumbnail.mutate({ id: videoId })}>
                                                             <RotateCcwIcon className="size-4 mr-1 " />
                                                             Restore
                                                         </DropdownMenuItem>
