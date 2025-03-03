@@ -84,6 +84,20 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
         },
     });
 
+
+
+    const generateThumbnail = trpc.videos.restoreThumbnail.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            utils.studio.getOne.invalidate({ id: videoId });
+            toast.success("Thumbnail Restored ✅");
+
+        },
+        onError: () => {
+            toast.error("Something went wrong ❌");
+        },
+    });
+
     const restoreThumbnail = trpc.videos.restoreThumbnail.useMutation({
         onSuccess: () => {
             utils.studio.getMany.invalidate();
