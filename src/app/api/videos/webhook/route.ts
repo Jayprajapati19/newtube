@@ -114,8 +114,6 @@ export const POST = async (request: Request) => {
                     previewUrl,
                     previewKey,
                     duration,
-
-
                 })
                 .where(eq(videos.muxUploadId, data.upload_id));
             break;

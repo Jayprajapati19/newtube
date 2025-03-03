@@ -11,6 +11,7 @@ interface ThumbnailUploadModalProps {
 export const ThumbnailUploadModal = ({
     videoId, open, onOpenChange
 }: ThumbnailUploadModalProps) => {
+
     const utils = trpc.useUtils();
 
     const onUploadComplete = () => {

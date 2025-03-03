@@ -1,10 +1,10 @@
+import { z } from "zod";
 import { db } from "@/db";
 import { users, videos } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
-import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError, UTApi } from "uploadthing/server";
-import { z } from "zod";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
 
@@ -28,9 +28,7 @@ export const ourFileRouter = {
                 .from(users)
                 .where(eq(users.clerkId, clerkUserId));
 
-            if (!user) {
-                throw new UploadThingError("Unauthorized");
-            }
+            if (!user) throw new UploadThingError("Unauthorized");
 
             const [existingVideo] = await db
                 .select({
@@ -48,8 +46,8 @@ export const ourFileRouter = {
                 const utapi = new UTApi();
 
                 await utapi.deleteFiles(existingVideo.thumbnailKey);
-                await db.
-                    update(videos)
+                await db
+                    .update(videos)
                     .set({ thumbnailKey: null, thumbnailUrl: null })
                     .where(and(
                         eq(videos.id, input.videoId),
@@ -60,7 +58,6 @@ export const ourFileRouter = {
             return { user, ...input };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-            // try {
             await db
                 .update(videos)
                 .set({
@@ -73,10 +70,7 @@ export const ourFileRouter = {
                 ));
 
             return { uploadedBy: metadata.user.id };
-            // } catch (error) {
-            //     console.error("Error updating video thumbnail:", error);
-            //     throw new UploadThingError("Failed to update video thumbnail");
-            // }
+
         }),
 } satisfies FileRouter;
 

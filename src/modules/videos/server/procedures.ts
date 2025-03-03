@@ -7,7 +7,6 @@ import { and, eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { UTApi } from "uploadthing/server";
 
-
 export const videosRouter = createTRPCRouter({
 
     restoreThumbnail: protectedProcedure
@@ -55,7 +54,6 @@ export const videosRouter = createTRPCRouter({
 
             const { key: thumbnailKey, url: thumbnailUrl } = uploadedThumbnail.data;
 
-
             const [updatedVideo] = await db
                 .update(videos)
                 .set({ thumbnailUrl, thumbnailKey })
@@ -63,7 +61,6 @@ export const videosRouter = createTRPCRouter({
                     eq(videos.id, input.id),
                     eq(videos.userId, userId),
                 ))
-
                 .returning()
 
             return updatedVideo;
