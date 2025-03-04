@@ -30,15 +30,17 @@ const model = genAI.getGenerativeModel({
 export const generateResult = async (prompt: string): Promise<string> => {
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
-    try {
-        const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === "object" && typeof parsed.description === "string") {
-            return parsed.description.trim();
+    if (text.startsWith("{") && text.endsWith("}")) {
+        try {
+            const parsed = JSON.parse(text);
+            if (parsed && typeof parsed === "object" && typeof parsed.description === "string") {
+                return parsed.description.trim();
+            }
+        } catch {
+            // JSON parsing failed; fallback below.
         }
-    } catch {
-        // If not valid JSON then simply remove surrounding quotes.
     }
-    // Remove any surrounding quotes if present and return plain description.
+    // Fallback: remove any surrounding quotes and return the clean text.
     return text.replace(/^"+|"+$/g, "").trim();
 };
 
@@ -62,13 +64,10 @@ export const { POST } = serve(
         const transcript = await context.run("get-transcript", async () => {
             const trackUrl = `https://stream.mux.com/${video.muxPlaybackId}/text/${video.muxTrackId}.txt`;
             const response = await fetch(trackUrl);
-
             if (!response.ok) {
                 throw new Error("Transcript not found");
             }
-
-            const text = await response.text();
-            return text;
+            return await response.text();
         });
 
         const prompt = `Summarize the following transcript for a YouTube video description: ` +

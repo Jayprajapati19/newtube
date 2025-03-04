@@ -32,16 +32,19 @@ const model = genAI.getGenerativeModel({
 export const generateResult = async (prompt: string): Promise<string> => {
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
-    try {
-        const parsed = JSON.parse(text);
-        if (parsed && typeof parsed === "object" && typeof parsed.title === "string") {
-            return parsed.title.trim();
+    // If text appears to be a JSON object, attempt to parse and extract the title.
+    if (text.startsWith("{") && text.endsWith("}")) {
+        try {
+            const parsed = JSON.parse(text);
+            if (parsed && typeof parsed === "object" && typeof parsed.title === "string") {
+                return parsed.title.trim();
+            }
+        } catch {
+            // If JSON parsing fails, fallback to plain text.
         }
-    } catch {
-        // If not valid JSON then simply remove surrounding quotes.
     }
-    // Remove any surrounding quotes if present and return plain title.
-    return text.replace(/^"+|"+$/g, "").trim();
+    // Return plain text as is.
+    return text;
 };
 
 export const { POST } = serve(
