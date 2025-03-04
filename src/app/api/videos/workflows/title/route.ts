@@ -77,7 +77,7 @@ export const { POST } = serve(
         });
 
         const prompt = `Generate an SEO title for a YouTube video about a YouTube clone project. ` +
-            `Transcript/Description: "${transcript || video.description || ''}"`;
+            `Transcript/Description: "${transcript || video.title || ''}"`;
 
         const title = await generateResult(prompt);
         if (!title) throw new Error("Title generation failed. No title returned");
