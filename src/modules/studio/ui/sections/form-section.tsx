@@ -26,6 +26,7 @@ import { snakeCaseToTitle } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ThumbnailUploadModal } from "../components/thumbnail-upload-modal";
 import { ThumbnailGeneratedModal } from "../components/thumbnail-generate-modal";
 
@@ -47,8 +48,60 @@ export const FormSection = ({ videoId }: FormSectionProps) => {
 };
 
 const FormSectionSkeleton = () => {
-    return <p>Loading....</p>
-
+    return (
+        <div>
+            <div className="flex items-center justify-between mb-6">
+                <div className="space-y-2">
+                    <Skeleton className="h-7 w-32" />
+                    <Skeleton className="h-4 w-40" />
+                </div>
+                <Skeleton className="h-9 w-24" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="space-y-8 lg:col-span-3">
+                    <div className="space-y-2 ">
+                        <Skeleton className="h-5 w-16" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                    <div className="space-y-2 ">
+                        <Skeleton className="h-5 w-24" />
+                        <Skeleton className="h-[220px] w-full" />
+                    </div>
+                    <div className="space-y-2 ">
+                        <Skeleton className="h-5 w-20" />
+                        <Skeleton className="h-[84px] w-[153px]" />
+                    </div>
+                    <div className="space-y-2 ">
+                        <Skeleton className="h-5 w-20" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                </div>
+                <div className="flex flex-col gap-y-8 lg:col-span-2">
+                    <div className="flex flex-col gap-4 bg-[#F9F9F9] rounded-xl overflow-hidden">
+                        <Skeleton className="aspect-video" />
+                        <div className="px-4 py-4 space-y-6">
+                            <div className="h-4 space-y-2 ">
+                                <Skeleton className="h-4 w-20" />
+                                <Skeleton className="h-5 w-full" />
+                            </div>
+                            <div className="h-4 space-y-2 ">
+                                <Skeleton className="h-4 w-24" />
+                                <Skeleton className="h-5 w-32" />
+                            </div>
+                            <div className="h-4 space-y-2 ">
+                                <Skeleton className="h-4 w-24" />
+                                <Skeleton className="h-5 w-32" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="h-4 space-y-2">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-5 w-full" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
@@ -175,7 +228,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                             <p className="text-xs text-muted-foreground ">Manage Your video details</p>
                         </div>
                         <div className="flex items-center gap-x-2 ">
-                            <Button type="submit" disabled={update.isPending}>
+                            <Button type="submit" disabled={update.isPending || form.formState.isDirty}>
                                 Save
                             </Button>
                             <DropdownMenu>
@@ -391,10 +444,8 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                             <p className="text-sm">
                                                 {snakeCaseToTitle(video.muxStatus || "preparing")}
                                             </p>
-
                                         </div>
                                     </div>
-
                                     <div className="flex justify-between items-center ">
                                         <div className="flex flex-col gap-y-1">
                                             <p className="text-muted-foreground text-xs">
@@ -403,13 +454,10 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                             <p className="text-sm">
                                                 {snakeCaseToTitle(video.muxTrackStatus || "no_subtitles")}
                                             </p>
-
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
 
                             <FormField
                                 control={form.control}
@@ -447,16 +495,10 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     </FormItem>
                                 )}
                             />
-
-
                         </div>
                     </div>
                 </form>
             </Form >
         </>
-
-
-    )
-
-
+    );
 };

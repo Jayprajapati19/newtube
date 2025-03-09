@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { videos } from "@/db/schema";
 import { serve } from "@upstash/workflow/nextjs";
-import { WorkflowContext } from "@upstash/workflow";
 import { and, eq } from "drizzle-orm";
 
 interface InputType {
@@ -42,9 +41,9 @@ const generateTitle = async (transcript: string): Promise<string> => {
     return result.choices?.[0]?.message?.content?.trim() || "Untitled Video";
 };
 
-export const { POST } = serve(async (context: WorkflowContext<InputType>) => {
+export const { POST } = serve(async (context) => {
     try {
-        const input = context.requestPayload;
+        const input = context.requestPayload as InputType;
         const { videoId, userId } = input;
 
         const video = await context.run("get-video", async () => {

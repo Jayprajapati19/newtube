@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ /api/videos/workflows/
+ 
+ <!-- part 2 -->
 
-## Getting Started
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_cmVuZXdpbmctc2Vhc25haWwtMzQuY2xlcmsuYWNjb3VudHMuZGV2JA
+CLERK_SECRET_KEY=sk_test_gluUsFqwHCT1tapIWbIE2LBy0nLK7l04H3CGkFkfQJ
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/
+CLERK_SIGNING_SECRET=whsec_b5MBC9Gdb/PY+mna3kMBEPsFqYoqJQgX
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+DATABASE_URL=postgresql://neondb_owner:npg_0aJKDR3oXfji@ep-fancy-union-a8h6ho88-pooler.eastus2.azure.neon.tech/neondb?sslmode=require
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+UPSTASH_REDIS_REST_URL="https://light-sawfish-18542.upstash.io"
+UPSTASH_REDIS_REST_TOKEN="AUhuAAIjcDEwY2VmZTZmMTJkODE0NDUzYTEzNzQ4Yjg1MTE5MDVhOHAxMA"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+MUX_TOKEN_ID=0b8bc66-4e7f-43fb-8427-f54f3bdf04ba
+MUX_TOKEN_SECRET=GcZddGK4wWUut2F34TiMFQ726d9vHhAhiB2kU89NfFa8x1j7uCemZt6p98GAQuaftHPCvYD07rL
+MUX_WEBHOOK_SECRET=hgsv4dh19pj4u71mc0aqc62on9ki2vp6
 
-## Learn More
+VERCEL_URL=http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+UPLOADTHING_TOKEN='eyJhcGlLZXkiOiJza19saXZlXzk1OGViMmMwNThiOGRmZjI4M2NiNDQzNWE5NDg5NGQ1ZjRiZGM2OWZkOGQxOGYyNmNkMWIwZGI1YWE2NmM3NjciLCJhcHBJZCI6ImJlaTZ2M2pqbnciLCJyZWdpb25zIjpbInNlYTEiXX0='
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+QSTASH_TOKEN='eyJVc2VySUQiOiI3YTkyYWRhZS1jNjQwLTQ0N2YtOTViYS05ZDZlNGM3ZTM1Y2QiLCJQYXNzd29yZCI6Ijk4NDhlYTEzMDg2NjRiM2I5N2ExN2NlOGM5NGQwYjlhIn0='
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+UPSTASH_WORKFLOW_URL=https://happily-rapid-flea.ngrok-free.app
 
-## Deploy on Vercel
+QSTASH_CURRENT_SIGNING_KEY=sig_7hZs9gmAHb5aXtadNGiG7fPkDdxC
+QSTASH_NEXT_SIGNING_KEY=sig_4osNtMuja56NP3ncNGDsR2RYm63H
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+OPENAI_API_KEY=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
+
+GEMINI_API_KEY=AIzaSyBFtsD8vDqaBQVNSICCTHNiMRcIynUajmM
+
+DEEPSEEK_API_KEY=sk-cef53f27d75542efa55ca0d2353a543e
