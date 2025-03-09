@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 import { ThumbnailUploadModal } from "../components/thumbnail-upload-modal";
+import { ThumbnailGeneratedModal } from "../components/thumbnail-generate-modal";
 
 
 
@@ -56,6 +57,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
 
     const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+    const [thumbnailGenerateModalOpen, setThumbnailGenerateModalOpen] = useState(false);
 
 
 
@@ -88,16 +90,6 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     });
 
 
-    const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
-        onSuccess: () => {
-
-            toast.success("Background job started", { description: "this may take some time" });
-
-        },
-        onError: () => {
-            toast.error("Something went wrong ❌");
-        },
-    });
 
     const generateTitle = trpc.videos.generateTitle.useMutation({
         onSuccess: () => {
@@ -162,10 +154,16 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     return (
         <>
             <ThumbnailUploadModal
+                open={thumbnailGenerateModalOpen}
+                onOpenChange={setThumbnailGenerateModalOpen}
+                videoId={videoId}
+            />
+            <ThumbnailGeneratedModal
                 open={thumbnailModalOpen}
                 onOpenChange={setThumbnailModalOpen}
                 videoId={videoId}
             />
+
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="flex items-center justify-between mb-6">
@@ -298,7 +296,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                             Change
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem
-                                                            onClick={() => generateThumbnail.mutate({ id: videoId })}
+                                                            onClick={() => setThumbnailGenerateModalOpen(true)}
                                                         >
                                                             <SparkleIcon className="size-4 mr-1 " />
                                                             AI-Generated

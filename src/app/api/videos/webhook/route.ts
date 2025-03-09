@@ -15,14 +15,12 @@ import { db } from "@/db";
 import { videos } from "@/db/schema";
 const SIGNING_SECRET = process.env.MUX_WEBHOOK_SECRET!;
 
-
 type WebhookEvent =
     | VideoAssetCreatedWebhookEvent
     | VideoAssetErroredWebhookEvent
     | VideoAssetReadyWebhookEvent
     | VideoAssetTrackReadyWebhookEvent
     | VideoAssetDeletedWebhookEvent;
-
 
 export const POST = async (request: Request) => {
     if (!SIGNING_SECRET) {
@@ -33,7 +31,6 @@ export const POST = async (request: Request) => {
 
     if (!muxSignature) {
         return new Response("No mux signature found", { status: 401 });
-
     }
 
     const payload = await request.json();
@@ -141,10 +138,7 @@ export const POST = async (request: Request) => {
                 return new Response("Missig upload ID", { status: 400 });
             }
 
-
             console.log("Deleting video: ", { uploadId: data.upload_id });
-
-
             await db
                 .delete(videos)
                 .where(eq(videos.muxUploadId, data.upload_id));
@@ -155,9 +149,7 @@ export const POST = async (request: Request) => {
             const data = payload.data as VideoAssetTrackReadyWebhookEvent["data"] & {
                 asset_id: string;
             }
-
             console.log("Track ready ");
-
             // Typescript incorrectly says that asset_id does not exist
             const assetId = data.asset_id;
             const trackId = data.id;

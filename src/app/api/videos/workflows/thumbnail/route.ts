@@ -6,16 +6,9 @@ import { and, eq } from "drizzle-orm";
 interface InputType {
     userId: string;
     videoId: string;
+    prompt: string;
 }
 
-const TITLE_SYSTEM_PROMPT = `Your task is to generate an SEO-focused title for a YouTube video 
-based on its transcript. Please follow these guidelines:
-- Be concise but descriptive, using relevant keywords to improve discoverability.
-- Highlight the most compelling or unique aspect of the video content.
-- Avoid jargon or overly complex language unless it directly supports searchability.
-- Use action-oriented phrasing or clear value propositions where applicable.
-- Ensure the title is 3-8 words long and no more than 100 characters.
-- ONLY return the title as plain text. Do not add quotes or any additional formatting.`;
 
 const generateTitle = async (transcript: string): Promise<string> => {
     const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
@@ -44,7 +37,7 @@ const generateTitle = async (transcript: string): Promise<string> => {
 export const { POST } = serve(async (context) => {
     try {
         const input = context.requestPayload as InputType;
-        const { videoId, userId } = input;
+        const { videoId, userId, propmpt } = input;
 
         const video = await context.run("get-video", async () => {
             const [existingVideo] = await db
@@ -56,16 +49,14 @@ export const { POST } = serve(async (context) => {
             return existingVideo;
         });
 
-        const transcript = await context.run("get-transcript", async () => {
-            const trackUrl = `https://stream.mux.com/${video.muxPlaybackId}/text/${video.muxTrackId}.txt`;
-            const response = await fetch(trackUrl);
 
-            if (!response.ok) {
-                throw new Error("Transcript not found");
-            }
 
-            return response.text();
-        });
+
+        const { body } = await context.call("generate-thumbnail", {
+            url: "gemini image generation model link"
+            // 11:22
+        })
+
 
         const title = await generateTitle(transcript || video.title || "");
 
