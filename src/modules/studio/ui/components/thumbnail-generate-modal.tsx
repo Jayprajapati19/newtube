@@ -34,7 +34,8 @@ export const ThumbnailGeneratedModal = ({
         onSuccess: () => {
 
             toast.success("Background job started", { description: "this may take some time" });
-
+            form.reset();
+            onOpenChange(false);
         },
         onError: () => {
             toast.error("Something went wrong ❌");

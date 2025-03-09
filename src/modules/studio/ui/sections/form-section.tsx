@@ -154,15 +154,18 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     return (
         <>
             <ThumbnailUploadModal
-                open={thumbnailGenerateModalOpen}
-                onOpenChange={setThumbnailGenerateModalOpen}
-                videoId={videoId}
-            />
-            <ThumbnailGeneratedModal
                 open={thumbnailModalOpen}
                 onOpenChange={setThumbnailModalOpen}
                 videoId={videoId}
             />
+
+
+            <ThumbnailGeneratedModal
+                open={thumbnailGenerateModalOpen}
+                onOpenChange={setThumbnailGenerateModalOpen}
+                videoId={videoId}
+            />
+
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
