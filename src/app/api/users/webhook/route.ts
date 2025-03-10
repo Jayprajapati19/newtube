@@ -4,7 +4,6 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 import { users } from '@/db/schema'
 import { db } from '@/db'
 import { eq } from 'drizzle-orm'
-// import  eq  from "drizzle-orm"
 
 export async function POST(req: Request) {
     const SIGNING_SECRET = process.env.CLERK_SIGNING_SECRET
