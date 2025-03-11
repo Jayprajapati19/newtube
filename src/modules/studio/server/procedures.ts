@@ -13,7 +13,6 @@ export const studioRouter = createTRPCRouter({
             const { id: userId } = ctx.user;
             const { id } = input;
 
-
             const [video] = await db
                 .select()
                 .from(videos)
@@ -29,8 +28,6 @@ export const studioRouter = createTRPCRouter({
             return video;
 
         }),
-
-
 
     getMany: protectedProcedure
         .input(

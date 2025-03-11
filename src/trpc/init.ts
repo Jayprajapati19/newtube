@@ -54,8 +54,6 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
     }
 
-
-
     return opts.next({
         ctx: {
             ...ctx,

@@ -16,5 +16,3 @@ export const VideoView = ({ videoId }: VideoProps) => {
         </div>
     )
 };
-
-// 15:05

@@ -2,15 +2,12 @@ import { UploadIcon } from "lucide-react";
 import MuxUploader, { MuxUploaderDrop, MuxUploaderFileSelect, MuxUploaderProgress, MuxUploaderStatus } from "@mux/mux-uploader-react"
 import { Button } from "@/components/ui/button";
 
-
-
 interface StudioUploaderProps {
     endpoint?: string | null;
     onSuccess: () => void;
 };
 
 const UPLOADER_ID = "video-uploader"
-
 
 export const StudioUploader = ({
     endpoint,
@@ -56,7 +53,6 @@ export const StudioUploader = ({
                     muxUploader={UPLOADER_ID}
                     type="bar"
                 />
-
 
             </MuxUploaderDrop>
         </div>

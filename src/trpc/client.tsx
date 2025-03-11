@@ -57,6 +57,7 @@ export function TRPCProvider(
             ],
         }),
     );
+
     return (
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>

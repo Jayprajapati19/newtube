@@ -17,67 +17,92 @@ based on its transcript. Please follow these guidelines:
 - Ensure the title is 3-8 words long and no more than 100 characters.
 - ONLY return the title as plain text. Do not add quotes or any additional formatting.`;
 
+/**
+ * Generates an SEO-friendly title using Gemini API.
+ */
 const generateTitle = async (transcript: string): Promise<string> => {
-    const response = await fetch("https://api.gemini.com/v1/chat/completions", {
+    console.log("Generating title for transcript:", transcript.substring(0, 100));
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.GEMINI_API_KEY!}`,
         },
         body: JSON.stringify({
-            model: "gemini-1.5-flash",
-            messages: [
-                { role: "system", content: TITLE_SYSTEM_PROMPT },
-                { role: "user", content: `Generate an SEO title for this YouTube video: ${transcript}` },
+            contents: [
+                { role: "user", parts: [{ text: TITLE_SYSTEM_PROMPT }] },
+                { role: "user", parts: [{ text: `Generate an SEO title for this YouTube video: ${transcript}` }] },
             ],
         }),
     });
 
     if (!response.ok) {
-        throw new Error(`Gemini API Error: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error(`Gemini API Error: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(`Gemini API Error: ${response.statusText} - ${errorText}`);
     }
 
     const result = await response.json();
-    return result.choices?.[0]?.message?.content?.trim() || "Untitled Video";
+    console.log("Gemini API Response:", JSON.stringify(result, null, 2));
+
+    return result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "Untitled Video";
 };
 
 export const { POST } = serve(async (context) => {
-    try {
-        const input = context.requestPayload as InputType;
-        const { videoId, userId } = input;
+    const input = context.requestPayload as InputType;
+    const { videoId, userId } = input;
 
-        const video = await context.run("get-video", async () => {
-            const [existingVideo] = await db
-                .select()
-                .from(videos)
-                .where(and(eq(videos.id, videoId), eq(videos.userId, userId)));
-            if (!existingVideo) throw new Error("Video not found");
-            return existingVideo;
-        });
+    console.log(`Processing videoId: ${videoId}, userId: ${userId}`);
 
-        const transcript = await context.run("get-transcript", async () => {
-            const trackUrl = `https://stream.mux.com/${video.muxPlaybackId}/text/${video.muxTrackId}.txt`;
-            const response = await fetch(trackUrl);
-            if (!response.ok) {
-                throw new Error("Transcript not found");
-            }
-            return response.text();
-        });
+    // Fetch the video details
+    const video = await context.run("get-video", async () => {
+        const [existingVideo] = await db
+            .select()
+            .from(videos)
+            .where(and(eq(videos.id, videoId), eq(videos.userId, userId)));
 
-        const title = await generateTitle(transcript || video.title || "");
-        if (!title) throw new Error("Title generation failed. No title returned");
+        if (!existingVideo) {
+            console.error("Video not found");
+            throw new Error("Video not found");
+        }
 
-        await context.run("update-video", async () => {
-            await db
-                .update(videos)
-                .set({ title })
-                .where(and(eq(videos.id, video.id), eq(videos.userId, video.userId)));
-        });
+        return existingVideo;
+    });
 
-        return new Response(title, {
-            headers: { "Content-Type": "text/plain" },
-        });
-    } catch (error: any) {
-        return new Response(`Error: ${error.message}`, { status: 500 });
+    console.log("Fetched video:", video);
+
+    // Fetch transcript from Mux
+    const transcript = await context.run("get-transcript", async () => {
+        const trackUrl = `https://stream.mux.com/${video.muxPlaybackId}/text/${video.muxTrackId}.txt`;
+        console.log("Fetching transcript from:", trackUrl);
+
+        const response = await fetch(trackUrl);
+        if (!response.ok) {
+            console.error("Transcript not found");
+            throw new Error("Transcript not found");
+        }
+
+        return response.text();
+    });
+
+    console.log("Fetched transcript (first 100 chars):", transcript.substring(0, 100));
+
+    // Generate the title using Gemini API
+    const title = await generateTitle(transcript || video.title || "");
+    if (!title) {
+        console.error("Title generation failed. No title returned.");
+        throw new Error("Title generation failed. No title returned");
     }
+
+    console.log("Generated title:", title);
+
+    // Update the video title in the database
+    await context.run("update-video", async () => {
+        await db
+            .update(videos)
+            .set({ title })
+            .where(and(eq(videos.id, video.id), eq(videos.userId, video.userId)));
+    });
+
+    console.log("Title updated successfully.");
 });

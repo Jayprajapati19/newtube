@@ -80,6 +80,3 @@ export const videoRelations = relations(videos, ({ one }) => ({
     }),
 }));
 
-
-
-
