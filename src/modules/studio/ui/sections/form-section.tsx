@@ -228,7 +228,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                             <p className="text-xs text-muted-foreground ">Manage Your video details</p>
                         </div>
                         <div className="flex items-center gap-x-2 ">
-                            <Button type="submit" disabled={update.isPending || form.formState.isDirty}>
+                            <Button type="submit" disabled={update.isPending}>
                                 Save
                             </Button>
                             <DropdownMenu>
@@ -469,7 +469,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                         </FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value ?? undefined}
+                                            value={field.value} // Ensure the value is correctly set
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
