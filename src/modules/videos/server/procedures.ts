@@ -30,6 +30,8 @@ export const videosRouter = createTRPCRouter({
 
             return existingVideo;
         }),
+
+
     generateDescription: protectedProcedure
         .input(z.object({ id: z.string().uuid() }))
         .mutation(async ({ ctx, input }) => {
