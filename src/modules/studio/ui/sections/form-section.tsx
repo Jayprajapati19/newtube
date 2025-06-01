@@ -132,13 +132,20 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
     const remove = trpc.videos.remove.useMutation({
         onSuccess: () => {
-            utils.studio.getMany.invalidate();
+            // Invalidate all studio queries to ensure no stale data
+            utils.studio.invalidate();
+
+            // Show success toast
             toast.success("Video Removed ✅");
+
+            // Redirect to studio page
             router.push("/studio");
 
+            // Force a hard navigation to clear any cached state
+            router.refresh();
         },
-        onError: () => {
-            toast.error("Something went wrong ❌");
+        onError: (error) => {
+            toast.error(`Error removing video: ${error.message}`);
         },
     });
 

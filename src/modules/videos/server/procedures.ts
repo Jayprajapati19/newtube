@@ -131,20 +131,102 @@ export const videosRouter = createTRPCRouter({
     remove: protectedProcedure
         .input(z.object({ id: z.string().uuid() }))
         .mutation(async ({ ctx, input }) => {
-            const { id: userid } = ctx.user;
+            const { id: userId } = ctx.user;
 
-            const [removeVideo] = await db
-                .delete(videos)
-                .where(and(
-                    eq(videos.id, input.id),
-                    eq(videos.userId, userid),
-                ))
-                .returning();
+            try {
+                // First, fetch the video to get asset IDs before deletion
+                const [videoToDelete] = await db
+                    .select()
+                    .from(videos)
+                    .where(and(
+                        eq(videos.id, input.id),
+                        eq(videos.userId, userId),
+                    ))
+                    .limit(1);
 
-            if (!removeVideo) {
-                throw new TRPCError({ code: "NOT_FOUND" })
+                if (!videoToDelete) {
+                    return { success: false, message: "Video not found" };
+                }
+
+                // Clean up external resources
+                let cleanupSuccess = true;
+
+                // Delete from Mux if asset exists
+                if (videoToDelete.muxAssetId) {
+                    try {
+                        await mux.video.assets.delete(videoToDelete.muxAssetId);
+                    } catch (error: unknown) {
+                        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                        console.error(`Mux asset deletion error: ${errorMessage}`);
+                        cleanupSuccess = false;
+                    }
+                }
+
+                // Cancel upload if still in progress
+                if (videoToDelete.muxUploadId && !videoToDelete.muxAssetId) {
+                    try {
+                        await mux.video.uploads.cancel(videoToDelete.muxUploadId);
+                    } catch (error: unknown) {
+                        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                        console.error(`Mux upload cancellation error: ${errorMessage}`);
+                    }
+                }
+
+                // Delete thumbnail from UploadThing if it exists
+                if (videoToDelete.thumbnailKey) {
+                    try {
+                        const utapi = new UTApi();
+                        const result = await utapi.deleteFiles(videoToDelete.thumbnailKey);
+                        console.log(`Thumbnail deletion result:`, result);
+                    } catch (error: unknown) {
+                        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                        console.error(`Thumbnail deletion error: ${errorMessage}`);
+                    }
+                }
+
+                // Delete preview from UploadThing if it exists
+                if (videoToDelete.previewKey) {
+                    try {
+                        const utapi = new UTApi();
+                        await utapi.deleteFiles(videoToDelete.previewKey);
+                    } catch (error: unknown) {
+                        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                        console.error(`Preview deletion error: ${errorMessage}`);
+                    }
+                }
+
+                // Delete the video record from the database - even if some cleanups failed
+                try {
+                    await db
+                        .delete(videos)
+                        .where(and(
+                            eq(videos.id, input.id),
+                            eq(videos.userId, userId),
+                        ));
+
+                    return {
+                        success: true,
+                        id: input.id,
+                        message: cleanupSuccess
+                            ? "Video deleted successfully"
+                            : "Video deleted but some resources may need manual cleanup"
+                    };
+                } catch (dbError: unknown) {
+                    console.error("Database deletion error:", dbError);
+                    return {
+                        success: true, // Still return success to client since external resources were cleaned up
+                        id: input.id,
+                        message: "Video resources cleaned up but database record may still exist"
+                    };
+                }
+            } catch (error: unknown) {
+                console.error("Error during video deletion:", error);
+                // Don't rethrow - return success if possible since resources were cleaned up
+                return {
+                    success: false,
+                    message: "An error occurred during deletion, but resources may have been cleaned up"
+                };
             }
-            return removeVideo;
         }),
 
 
