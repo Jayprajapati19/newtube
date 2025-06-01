@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev:all": "concurrently \"bun run dev:webhook\" \"bun run dev\" ",
-    "dev": "next dev",
     "dev:webhook": "ngrok http --url=repeatedly-eternal-worm.ngrok-free.app 3000",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
