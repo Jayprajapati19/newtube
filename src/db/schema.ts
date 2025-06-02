@@ -16,6 +16,7 @@ export const users = pgTable("users", {
 export const userRelations = relations(users, ({ many }) => ({
     videos: many(videos),
     videosViews: many(videoViews),
+    videoReactions: many(videoReactions),
 
 }))
 
@@ -81,6 +82,7 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
         references: [categories.id],
     }),
     views: many(videoViews),
+    reactions: many(videoReactions),
 }));
 
 export const videoViews = pgTable("video_views", {
@@ -114,12 +116,12 @@ export const videoViewsUpdateSchema = createUpdateSchema(videoViews);
 
 
 
-export const reactionType = pgEnum("reaction_type", ["Like", "dislike"]);
+export const reactionType = pgEnum("reaction_type", ["like", "dislike"]);
 
 export const videoReactions = pgTable("video_reactions", {
     userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
     videoId: uuid("video_id").references(() => videos.id, { onDelete: "cascade" }).notNull(),
-    reaction: reactionType("type").notNull(),
+    type: reactionType("type").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (t) => [
