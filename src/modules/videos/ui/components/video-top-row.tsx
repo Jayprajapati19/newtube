@@ -54,5 +54,3 @@ export const VideoRow = ({ video }: VideoRowProps) => {
         </div>
     )
 }
-
-// 1hr
