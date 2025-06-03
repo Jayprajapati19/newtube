@@ -28,7 +28,7 @@ export const useSubscription = ({
             }
         },
         onError: (error) => {
-            toast.error("Semothing went wrong🔕");
+            toast.error("Semothing went wrong ");
 
             if (error.data?.code === "UNAUTHORIZED") {
                 clerk.openSignIn();
@@ -38,7 +38,7 @@ export const useSubscription = ({
 
     const unsubscribe = trpc.subscriptions.remove.useMutation({
         onSuccess: () => {
-            toast.success("Subscribed! 🔔");
+            toast.success("Unsubscribed! 🔕");
             // TODO: reinvalidate subscription.geymany, users.getone
 
             if (fromVideoId) {
