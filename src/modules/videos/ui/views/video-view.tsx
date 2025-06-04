@@ -1,4 +1,4 @@
-import { CommentsSections } from "../sections/comments-section";
+import { CommetsSection } from "../sections/comments-section";
 import { SuggestionSection } from "../sections/suggestions-section";
 import { VideoSection } from "../sections/video-section";
 
@@ -15,7 +15,7 @@ export const VideoView = ({ videoId }: VideoProps) => {
                     <div className="xl:hidden block mt-4 ">
                         <SuggestionSection />
                     </div>
-                    <CommentsSections />
+                    <CommetsSection videoId={videoId} />
                 </div>
                 <div className="hidden xl:block w-full xl:w-[380px] 2xl:w-[460px] shrink-1">
                     <SuggestionSection />
