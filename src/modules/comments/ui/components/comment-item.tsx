@@ -7,7 +7,6 @@ interface CommentItemProps {
     comment: CommentsGetManyOutput[number];
 };
 
-
 export const CommentItem = ({
     comment
 }: CommentItemProps) => {
