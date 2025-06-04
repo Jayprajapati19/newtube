@@ -3,9 +3,33 @@ import { baseProcedure, createTRPCRouter, protectedProcedure } from "@/trpc/init
 import { db } from "@/db";
 import { comments, users } from "@/db/schema";
 import { and, count, desc, eq, getTableColumns, lt, or } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 
 
 export const commentsRouter = createTRPCRouter({
+    remove: protectedProcedure
+        .input(z.object({
+            id: z.string().uuid(),
+        }))
+        .mutation(async ({ input, ctx }) => {
+            const { id } = input;
+            const { id: userId } = ctx.user;
+
+            const [deletedComment] = await db
+                .delete(comments)
+                .where(and(
+                    eq(comments.userId, userId),
+                    eq(comments.id, id),
+                ))
+                .returning();
+
+            if (!deletedComment) {
+                throw new TRPCError({ code: "NOT_FOUND" })
+            }
+
+            return deletedComment;
+        }),
+
     create: protectedProcedure
         .input(z.object({
             videoId: z.string().uuid(),
