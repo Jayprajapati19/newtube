@@ -79,7 +79,10 @@ export const CommnetForm = ({ videoId, onSuccess }: CommnetFormProps) => {
                         )}
                     />
                     <div className="justify-end gap-2 mt-2 flex">
-                        <Button type="submit" size="sm">
+                        <Button
+                            disabled={create.isPending}
+                            type="submit"
+                            size="sm">
                             Comment
                         </Button>
                     </div>

@@ -4,6 +4,7 @@ import { trpc } from "@/trpc/client";
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 import { CommnetForm } from "@/modules/comments/ui/components/comment-form";
+import { CommentItem } from "@/modules/comments/ui/components/comment-item";
 
 interface CommentsSectionsProps {
     videoId: string;
@@ -31,8 +32,15 @@ export const CommentsSectionSuspense = ({ videoId }: CommentsSectionsProps) => {
                     0 Comments
                 </h1>
                 <CommnetForm videoId={videoId} />
+                <div className="flex flex-col gap-4 mt-2">
+                    {comments.map((comment => (
+                        <CommentItem
+                            key={comment.id}
+                            comment={comment}
+                        />
+                    )))}
+                </div>
             </div>
-            {JSON.stringify(comments)}
         </div>
     );
 };
