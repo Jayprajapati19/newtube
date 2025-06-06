@@ -32,7 +32,8 @@ export const CommentForm = ({ videoId, onSuccess, parentId, onCancel, variant = 
             onSuccess?.();
         },
         onError: (error) => {
-            toast.error("Something went wrong");
+            console.error("Comment creation error:", error);
+            toast.error("Failed to add comment");
 
             if (error.data?.code === "UNAUTHORIZED") {
                 clerk.openSignIn();
