@@ -78,7 +78,7 @@ export const CommentItem = ({
             <div className="flex  gap-4">
                 <Link href={`/users/${comment.userId}`}>
                     <UserAvatar
-                        size="lg"
+                        size={variant === "comment" ? "lg" : "sm"}
                         imageUrl={comment.user.ImageUrl}
                         name={comment.user.name}
                     />
@@ -151,12 +151,10 @@ export const CommentItem = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        {variant === "comment" && (
-                            <DropdownMenuItem onClick={() => setIsReplyOpen(true)}>
-                                <MessageSquareIcon className="size-4" />
-                                Reply
-                            </DropdownMenuItem>
-                        )}
+                        <DropdownMenuItem onClick={() => setIsReplyOpen(true)}>
+                            <MessageSquareIcon className="size-4" />
+                            Reply
+                        </DropdownMenuItem>
                         {comment.user.clerkId === userId && (
                             <DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })}>
                                 <Trash2Icon className="size-4" />
