@@ -1,8 +1,8 @@
 import { z } from "zod"
 import { db } from "@/db";
-import { videos } from "@/db/schema";
+import { videos, videoViews, videoReactions, users } from "@/db/schema";
 import { createTRPCRouter, baseProcedure } from "@/trpc/init";
-import { eq, and, or, lt, desc } from "drizzle-orm";
+import { eq, and, or, lt, desc, getTableColumns } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
 
@@ -30,11 +30,24 @@ export const suggestionsRouter = createTRPCRouter({
 
             if (!existingVideo) {
                 throw new TRPCError({ code: "NOT_FOUND" });
-            };
+            }
 
             const data = await db
-                .select()
+                .select({
+                    ...getTableColumns(videos),
+                    viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
+                    likeCount: db.$count(videoReactions, and(
+                        eq(videoReactions.videoId, videos.id),
+                        eq(videoReactions.type, "like"),
+                    )),
+                    dislikeCount: db.$count(videoReactions, and(
+                        eq(videoReactions.videoId, videos.id),
+                        eq(videoReactions.type, "dislike"),
+                    )),
+
+                })
                 .from(videos)
+                .innerJoin(users, eq(videos.userId, users.id))
                 .where(and(
                     existingVideo.categoryId
                         ? eq(videos.categoryId, existingVideo.categoryId)

@@ -19,11 +19,11 @@ export const SuggestionSection = ({
 
     }, {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
-    })
+    });
 
     return (
         <div>
-            Suggetions
+            {JSON.stringify(suggestions)}
         </div>
     );
 };
