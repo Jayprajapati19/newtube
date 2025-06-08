@@ -15,12 +15,12 @@ import { VideoGetManyOutput } from "../../types"
 const videoRowCardVariants = cva("group flex min-w-0 ", {
     variants: {
         size: {
-            dafault: "gap-4",
+            default: "gap-4",
             compact: "gap-2"
         },
     },
     defaultVariants: {
-        size: "dafault"
+        size: "default"
     },
 });
 
@@ -78,7 +78,6 @@ export const VideoRowCard = ({
                     previewUrl={data.previewUrl}
                     title={data.title}
                     duration={data.duration}
-
                 />
             </Link>
 
@@ -94,12 +93,12 @@ export const VideoRowCard = ({
                         >
                             {data.title}
                         </h3>
-                        {size === "dafault" && (
+                        {size === "default" && (
                             <p className="text-xs text-muted-foreground mt-1">
                                 {compactViews} views • {compactLikes} likes
                             </p>
                         )}
-                        {size === "dafault" && (
+                        {size === "default" && (
                             <>
                                 <div className="flex items-center gap-2 my-3">
                                     <UserAvatar
@@ -145,8 +144,8 @@ export const VideoRowCard = ({
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 
 
