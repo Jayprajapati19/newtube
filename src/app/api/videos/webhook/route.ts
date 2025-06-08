@@ -150,7 +150,9 @@ export const POST = async (request: Request) => {
             const data = payload.data as VideoAssetTrackReadyWebhookEvent["data"] & {
                 asset_id: string;
             }
+
             console.log("Track ready ");
+
             // Typescript incorrectly says that asset_id does not exist
             const assetId = data.asset_id;
             const trackId = data.id;
