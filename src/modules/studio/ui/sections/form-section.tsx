@@ -132,16 +132,22 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
     const remove = trpc.videos.remove.useMutation({
         onSuccess: () => {
-            // Invalidate all studio queries to ensure no stale data
-            utils.studio.invalidate();
-
-            // Show success toast
+            utils.studio.getMany.invalidate();
             toast.success("Video Removed ✅");
-
-            // Redirect to studio page
             router.push("/studio");
+            router.refresh();
+        },
+        onError: (error) => {
+            toast.error(`Error removing video: ${error.message}`);
+        },
+    });
 
-            // Force a hard navigation to clear any cached state
+    const revalidate = trpc.videos.revalidate.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            utils.studio.getOne.invalidate({ id: videoId });
+            toast.success("Video Revalidated ✅");
+            router.push("/studio");
             router.refresh();
         },
         onError: (error) => {
@@ -245,10 +251,15 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" >
+                                    <DropdownMenuItem onClick={() => revalidate.mutate({ id: videoId })}>
+                                        <RotateCcwIcon className="size-4 mr-2" />
+                                        Revalidate
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => remove.mutate({ id: videoId })}>
                                         <TrashIcon className="size-4 mr-2" />
                                         Delete
                                     </DropdownMenuItem>
+
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
