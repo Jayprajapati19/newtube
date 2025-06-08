@@ -10,14 +10,14 @@ import { toast } from "sonner";
 
 interface VideoMenuProps {
     videoId: string;
-    variant: "ghost" | "secondary";
+    variant?: "ghost" | "secondary";
     onRemove?: () => void;
 }
 
 // TODO: implement what left
 export const VideoMenu = ({
     videoId,
-    variant,
+    variant = "ghost",
     onRemove
 }: VideoMenuProps) => {
 
