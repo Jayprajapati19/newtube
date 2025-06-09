@@ -13,7 +13,7 @@ const items = [
     },
     {
         title: "Subscriptions",
-        url: "/feed/subscriptions",
+        url: "/feed/subscribed",
         icon: PlaySquareIcon,
         auth: true,
     },
@@ -21,21 +21,16 @@ const items = [
         title: "Trending",
         url: "/feed/trending",
         icon: FlameIcon,
-    }
-]
-
+    },
+];
 
 export const MainSection = () => {
-
     const clerk = useClerk();
     const { isSignedIn } = useAuth();
-
-
 
     return (
         <SidebarGroup>
             <SidebarGroupContent>
-
                 <SidebarMenu>
                     {items.map((item) => (
                         <SidebarMenuItem key={item.title} >
@@ -59,8 +54,7 @@ export const MainSection = () => {
                         </SidebarMenuItem>
                     ))}
                 </SidebarMenu>
-
             </SidebarGroupContent>
         </SidebarGroup >
-    )
-}
+    );
+};
