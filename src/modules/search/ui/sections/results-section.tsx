@@ -50,7 +50,9 @@ export const ResultsSection = ({
                 </div>
             )}
             <InfiniteScroll
-            // 6:38
+                hasNextPage={resultQuery.hasNextPage}
+                isFetchingNextPage={resultQuery.isFetchingNextPage}
+                fetchNextPage={resultQuery.fetchNextPage}
             />
         </>
     )
