@@ -8,13 +8,13 @@ import { HistoryIcon, ListVideoIcon, ThumbsUpIcon } from "lucide-react"
 const items = [
     {
         title: "History",
-        url: "/playlist/history",
+        url: "/playlists/history",
         icon: HistoryIcon,
         auth: true,
     },
     {
         title: "Liked Videos",
-        url: "/playlist/liked",
+        url: "/playlists/liked",
         icon: ThumbsUpIcon,
         auth: true,
     },

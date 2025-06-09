@@ -121,7 +121,10 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
     }),
     views: many(videoViews),
     reactions: many(videoReactions),
-    comments: many(comments),
+    // FIX: Explicitly specify the relation name for comments
+    comments: many(comments, {
+        relationName: "comments_video_id_fkey",
+    }),
 }));
 
 
@@ -157,7 +160,13 @@ export const commentRelations = relations(comments, ({ one, many }) => ({
     reactions: many(commentsReactions),
     replies: many(comments, {
         relationName: "comments_parent_id_fkey",
-    })
+    }),
+    // FIX: Explicitly specify the relation to videos
+    video: one(videos, {
+        fields: [comments.videoId],
+        references: [videos.id],
+        relationName: "comments_video_id_fkey",
+    }),
 }));
 
 
