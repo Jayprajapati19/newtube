@@ -26,7 +26,6 @@ export const PlaylistAdddModal = ({
 
     })
 
-    // 9:1
 
 
     return (
@@ -46,3 +45,5 @@ export const PlaylistAdddModal = ({
         </ResponsiveModal>
     );
 };
+
+// 9:1
