@@ -18,6 +18,17 @@ export const playlistVideos = pgTable("playlist_videos", {
     }),
 ]);
 
+export const playlistVideoRelations = relations(playlistVideos, ({ one }) => ({
+    playlist: one(playlists, {
+        fields: [playlistVideos.playlistId],
+        references: [playlists.id],
+    }),
+    video: one(videos, {
+        fields: [playlistVideos.videoId],
+        references: [videos.id],
+    }),
+}));
+
 export const playlists = pgTable("playlists", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
@@ -26,6 +37,14 @@ export const playlists = pgTable("playlists", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+export const playlistRelations = relations(playlists, ({ one, many }) => ({
+    user: one(users, {
+        fields: [playlists.userId],
+        references: [users.id],
+    }),
+    playlistVideos: many(playlistVideos),
+}));
 
 export const users = pgTable("users", {
     id: uuid("id").primaryKey().defaultRandom(),
@@ -50,7 +69,10 @@ export const userRelations = relations(users, ({ many }) => ({
     }),
     commetns: many(comments),
     commentsReactions: many(commentsReactions),
+    playlists: many(playlists),
 }))
+
+
 
 
 export const subscriptions = pgTable("subscriptions", {
@@ -144,9 +166,15 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
     views: many(videoViews),
     reactions: many(videoReactions),
     // FIX: Explicitly specify the relation name for comments
-    comments: many(comments, {
-        relationName: "comments_video_id_fkey",
-    }),
+    comments: many(comments),
+    // comments: many(comments, {
+    //     relationName: "comments_video_id_fkey",
+    // }),
+    // playlists: many(playlistVideos, {
+    //     relationName: "playlist_videos_video_id_fkey",
+    // }),
+    playlistVideos: many(playlistVideos)
+
 }));
 
 
