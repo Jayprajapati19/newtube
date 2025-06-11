@@ -20,6 +20,7 @@ async function fetchWithRetry(
     url: string,
     options: RequestInit,
     retries = MAX_RETRIES
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
     let lastError: Error | null = null;
 
