@@ -1,8 +1,10 @@
+import { InfiniteScroll } from "@/components/infinite-scroll";
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_LIMIT } from "@/constants";
 import { trpc } from "@/trpc/client";
 import { Loader2Icon, SquareCheckIcon, SquareIcon } from "lucide-react";
+import { toast } from "sonner";
 
 
 interface PlaylistAddModalProps {
@@ -21,7 +23,13 @@ export const PlaylistAdddModal = ({
 
     const utils = trpc.useUtils();
 
-    const { data: playlists, isLoading } = trpc.playlists.getManyForVideo.useInfiniteQuery({
+    const {
+        data: playlists,
+        isLoading,
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage,
+    } = trpc.playlists.getManyForVideo.useInfiniteQuery({
         limit: DEFAULT_LIMIT,
         videoId,
     }, {
@@ -30,10 +38,30 @@ export const PlaylistAdddModal = ({
 
     })
 
-    // const handleOpenChange = (newOpen: boolean) => {
-    //     utils.playlists.getManyForVideo.reset()
-    //     onOpenChange(newOpen);
-    // }
+    const addVideo = trpc.playlists.addVideo.useMutation({
+        onSuccess: () => {
+            toast.success("Video added to playlist");
+            utils.playlists.getMany.invalidate();
+            utils.playlists.getManyForVideo.invalidate({ videoId });
+            // TODO: invalidate playlist.getone
+        },
+        onError: () => {
+            toast.error("Something went wrong ❌");
+        },
+    });
+
+
+    const removeVideo = trpc.playlists.removeVideo.useMutation({
+        onSuccess: () => {
+            toast.success("Video removed from playlist");
+            utils.playlists.getMany.invalidate();
+            utils.playlists.getManyForVideo.invalidate({ videoId });
+            // TODO: invalidate playlist.getone
+        },
+        onError: () => {
+            toast.error("Something went wrong ❌");
+        },
+    })
 
     return (
         <ResponsiveModal
@@ -56,16 +84,38 @@ export const PlaylistAdddModal = ({
                                 variant="ghost"
                                 className="w-full justify-start px-2 [&_svg]:size-5 "
                                 size="lg"
+                                onClick={() => {
+                                    if (playlist.containsVideo) {
+                                        removeVideo.mutate({
+                                            playlistId: playlist.id,
+                                            videoId,
+                                        });
+                                    } else {
+                                        addVideo.mutate({
+                                            playlistId: playlist.id,
+                                            videoId,
+                                        });
+                                    }
+                                }}
+                                disabled={removeVideo.isPending || addVideo.isPending}
                             >
                                 {playlist.containsVideo ? (
                                     <SquareCheckIcon className="mr-2" />
                                 ) : (
-                                    <SquareIcon cn />
+                                    <SquareIcon className="mr-2" />
                                 )}
                                 {playlist.name}
                             </Button>
                         ))
                 }
+                {!isLoading && (
+                    <InfiniteScroll
+                        hasNextPage={hasNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                        fetchNextPage={fetchNextPage}
+                        isManual
+                    />
+                )}
             </div>
         </ResponsiveModal>
     );
