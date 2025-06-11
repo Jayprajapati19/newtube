@@ -1,6 +1,8 @@
 import { DEFAULT_LIMIT } from "@/constants";
 import { HistoryView } from "@/modules/playlists/ui/views/history-views";
 import { HydrateClient, trpc } from "@/trpc/server";
+export const dynamic = "force-dynamic";
+
 
 const Page = async () => {
 
