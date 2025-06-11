@@ -1,7 +1,8 @@
 import { ResponsiveModal } from "@/components/responsive-modal";
+import { Button } from "@/components/ui/button";
 import { DEFAULT_LIMIT } from "@/constants";
 import { trpc } from "@/trpc/client";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, SquareCheckIcon, SquareIcon } from "lucide-react";
 
 
 interface PlaylistAddModalProps {
@@ -14,10 +15,13 @@ interface PlaylistAddModalProps {
 
 export const PlaylistAdddModal = ({
     videoId,
-    open, onOpenChange
+    open,
+    onOpenChange
 }: PlaylistAddModalProps) => {
 
-    const { data, isLoading } = trpc.playlists.getManyForVideo.useInfiniteQuery({
+    const utils = trpc.useUtils();
+
+    const { data: playlists, isLoading } = trpc.playlists.getManyForVideo.useInfiniteQuery({
         limit: DEFAULT_LIMIT,
         videoId,
     }, {
@@ -26,7 +30,10 @@ export const PlaylistAdddModal = ({
 
     })
 
-
+    // const handleOpenChange = (newOpen: boolean) => {
+    //     utils.playlists.getManyForVideo.reset()
+    //     onOpenChange(newOpen);
+    // }
 
     return (
         <ResponsiveModal
@@ -40,10 +47,27 @@ export const PlaylistAdddModal = ({
                         <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
                     </div>
                 )}
-                {JSON.stringify(data)}
+                {!isLoading &&
+                    playlists?.pages
+                        .flatMap((page) => page.items)
+                        .map((playlist) => (
+                            <Button
+                                key={playlist.id}
+                                variant="ghost"
+                                className="w-full justify-start px-2 [&_svg]:size-5 "
+                                size="lg"
+                            >
+                                {playlist.containsVideo ? (
+                                    <SquareCheckIcon className="mr-2" />
+                                ) : (
+                                    <SquareIcon cn />
+                                )}
+                                {playlist.name}
+                            </Button>
+                        ))
+                }
             </div>
         </ResponsiveModal>
     );
 };
 
-// 9:1
