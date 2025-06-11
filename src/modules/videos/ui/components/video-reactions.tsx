@@ -9,7 +9,6 @@ import { useClerk } from "@clerk/nextjs";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 
-// TODO: Properly implement reactions 
 
 interface VideoReactionsProps {
     videoId: string;
